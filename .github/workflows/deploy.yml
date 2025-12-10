@@ -1,9 +1,19 @@
 name: Build and Deploy
 
+# Triggers:
+# - Push to main: Runs tests, builds images, pushes to GHCR with :latest tag
+# - Pull requests to main: Runs tests, builds images (verification only), pushes with :pr-<number> tag
+# - This includes PRs from claude/* branches for pre-merge validation
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
 
 env:
   REGISTRY: ghcr.io
@@ -72,6 +82,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}
           tags: |
+            type=ref,event=pr,prefix=pr-
+            type=ref,event=branch,prefix=branch-
             type=sha,prefix={{branch}}-
             type=raw,value=latest,enable={{is_default_branch}}
 
@@ -85,6 +97,15 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Generate build summary
+        run: |
+          echo "## Backend Build Complete! 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Images pushed to GHCR:**" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
 
   build-frontend:
     name: Build Frontend
@@ -114,6 +135,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}
           tags: |
+            type=ref,event=pr,prefix=pr-
+            type=ref,event=branch,prefix=branch-
             type=sha,prefix={{branch}}-
             type=raw,value=latest,enable={{is_default_branch}}
 
@@ -127,3 +150,24 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Generate build summary
+        run: |
+          echo "## Frontend Build Complete! ✨" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Images pushed to GHCR:**" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "**This is a PR build for validation.** ✅" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Images are tagged with \`pr-${{ github.event.number }}\` and won't affect production." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**This is a production deployment.** 🚀" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Images are tagged with \`latest\` and will be deployed by Watchtower." >> $GITHUB_STEP_SUMMARY
+          fi
