@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { ContactForm } from '@/components/ContactForm'
 import { submitContactForm } from '@/app/contact/actions'
 
@@ -45,26 +46,17 @@ describe('ContactForm', () => {
 
   it('should show success message when form is submitted successfully', async () => {
     mockSubmitContactForm.mockResolvedValue({ success: true })
-
+    const user = userEvent.setup()
     render(<ContactForm />)
 
     // Fill out the form
-    fireEvent.change(screen.getByTestId('name-input'), {
-      target: { value: 'John Doe' },
-    })
-    fireEvent.change(screen.getByTestId('email-input'), {
-      target: { value: 'john@example.com' },
-    })
-    fireEvent.change(screen.getByTestId('subject-input'), {
-      target: { value: 'Test Subject' },
-    })
-    fireEvent.change(screen.getByTestId('message-input'), {
-      target: { value: 'Test message' },
-    })
+    await user.type(screen.getByTestId('name-input'), 'John Doe')
+    await user.type(screen.getByTestId('email-input'), 'john@example.com')
+    await user.type(screen.getByTestId('subject-input'), 'Test Subject')
+    await user.type(screen.getByTestId('message-input'), 'Test message')
 
     // Submit the form
-    const form = screen.getByTestId('contact-form')
-    fireEvent.submit(form)
+    await user.click(screen.getByTestId('submit-button'))
 
     // Wait for success message
     await waitFor(() => {
@@ -81,26 +73,17 @@ describe('ContactForm', () => {
       success: false,
       error: 'Failed to send email',
     })
-
+    const user = userEvent.setup()
     render(<ContactForm />)
 
     // Fill out the form
-    fireEvent.change(screen.getByTestId('name-input'), {
-      target: { value: 'John Doe' },
-    })
-    fireEvent.change(screen.getByTestId('email-input'), {
-      target: { value: 'john@example.com' },
-    })
-    fireEvent.change(screen.getByTestId('subject-input'), {
-      target: { value: 'Test Subject' },
-    })
-    fireEvent.change(screen.getByTestId('message-input'), {
-      target: { value: 'Test message' },
-    })
+    await user.type(screen.getByTestId('name-input'), 'John Doe')
+    await user.type(screen.getByTestId('email-input'), 'john@example.com')
+    await user.type(screen.getByTestId('subject-input'), 'Test Subject')
+    await user.type(screen.getByTestId('message-input'), 'Test message')
 
     // Submit the form
-    const form = screen.getByTestId('contact-form')
-    fireEvent.submit(form)
+    await user.click(screen.getByTestId('submit-button'))
 
     // Wait for error message
     await waitFor(() => {
@@ -112,72 +95,41 @@ describe('ContactForm', () => {
     )
   })
 
-  it('should disable form fields while submitting', async () => {
-    mockSubmitContactForm.mockImplementation(
-      () =>
-        new Promise((resolve) => {
-          setTimeout(() => resolve({ success: true }), 100)
-        })
-    )
+  it('should disable form fields and show sending text while submitting', async () => {
+    const user = userEvent.setup()
+
+    let resolve: (value: { success: boolean }) => void
+    const promise = new Promise<{ success: boolean }>((res) => {
+      resolve = res
+    })
+
+    mockSubmitContactForm.mockReturnValue(promise)
 
     render(<ContactForm />)
 
     // Fill out and submit the form
-    fireEvent.change(screen.getByTestId('name-input'), {
-      target: { value: 'John Doe' },
-    })
-    fireEvent.change(screen.getByTestId('email-input'), {
-      target: { value: 'john@example.com' },
-    })
-    fireEvent.change(screen.getByTestId('subject-input'), {
-      target: { value: 'Test Subject' },
-    })
-    fireEvent.change(screen.getByTestId('message-input'), {
-      target: { value: 'Test message' },
-    })
+    await user.type(screen.getByTestId('name-input'), 'John Doe')
+    await user.type(screen.getByTestId('email-input'), 'john@example.com')
+    await user.type(screen.getByTestId('subject-input'), 'Test Subject')
+    await user.type(screen.getByTestId('message-input'), 'Test message')
 
-    const form = screen.getByTestId('contact-form')
-    fireEvent.submit(form)
+    await user.click(screen.getByTestId('submit-button'))
 
-    // Check that fields are disabled while pending
+    // Check that fields are disabled and button text is updated
     await waitFor(() => {
       expect(screen.getByTestId('name-input')).toBeDisabled()
       expect(screen.getByTestId('email-input')).toBeDisabled()
       expect(screen.getByTestId('subject-input')).toBeDisabled()
       expect(screen.getByTestId('message-input')).toBeDisabled()
       expect(screen.getByTestId('submit-button')).toBeDisabled()
-    })
-  })
-
-  it('should show "Sending..." text on submit button while submitting', async () => {
-    mockSubmitContactForm.mockImplementation(
-      () =>
-        new Promise((resolve) => {
-          setTimeout(() => resolve({ success: true }), 100)
-        })
-    )
-
-    render(<ContactForm />)
-
-    // Fill out and submit the form
-    fireEvent.change(screen.getByTestId('name-input'), {
-      target: { value: 'John Doe' },
-    })
-    fireEvent.change(screen.getByTestId('email-input'), {
-      target: { value: 'john@example.com' },
-    })
-    fireEvent.change(screen.getByTestId('subject-input'), {
-      target: { value: 'Test Subject' },
-    })
-    fireEvent.change(screen.getByTestId('message-input'), {
-      target: { value: 'Test message' },
+      expect(screen.getByTestId('submit-button')).toHaveTextContent(
+        'Sending...'
+      )
     })
 
-    const form = screen.getByTestId('contact-form')
-    fireEvent.submit(form)
-
-    await waitFor(() => {
-      expect(screen.getByTestId('submit-button')).toHaveTextContent('Sending...')
+    await act(async () => {
+      resolve({ success: true })
+      await promise
     })
   })
 

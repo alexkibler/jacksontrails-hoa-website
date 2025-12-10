@@ -21,7 +21,7 @@ test.describe('Theme Switching', () => {
 
   test('should switch to dark mode when dark button is clicked', async ({ page }) => {
     // Find and click the dark mode button
-    const darkButton = page.getByTestId('dark-mode-button');
+    const darkButton = page.locator('[data-testid="dark-mode-button"]:visible');
     await darkButton.click();
 
     // Wait for the theme to be applied
@@ -38,12 +38,12 @@ test.describe('Theme Switching', () => {
 
   test('should switch back to light mode', async ({ page }) => {
     // First switch to dark mode
-    const darkButton = page.getByTestId('dark-mode-button');
+    const darkButton = page.locator('[data-testid="dark-mode-button"]:visible');
     await darkButton.click();
     await page.waitForTimeout(100);
 
     // Then switch back to light mode
-    const lightButton = page.getByTestId('light-mode-button');
+    const lightButton = page.locator('[data-testid="light-mode-button"]:visible');
     await lightButton.click();
     await page.waitForTimeout(100);
 
@@ -78,7 +78,7 @@ test.describe('Theme Switching', () => {
     await page.reload();
 
     // Click system mode button
-    const systemButton = page.getByTestId('system-mode-button');
+    const systemButton = page.locator('[data-testid="system-mode-button"]:visible');
     await systemButton.click();
     await page.waitForTimeout(100);
 
@@ -93,7 +93,7 @@ test.describe('Theme Switching', () => {
 
   test('should persist theme preference across page reloads', async ({ page }) => {
     // Switch to dark mode
-    const darkButton = page.getByTestId('dark-mode-button');
+    const darkButton = page.locator('[data-testid="dark-mode-button"]:visible');
     await darkButton.click();
     await page.waitForTimeout(100);
 
@@ -107,9 +107,9 @@ test.describe('Theme Switching', () => {
   });
 
   test('should have accessible theme toggle buttons', async ({ page }) => {
-    const lightButton = page.getByTestId('light-mode-button');
-    const darkButton = page.getByTestId('dark-mode-button');
-    const systemButton = page.getByTestId('system-mode-button');
+    const lightButton = page.locator('[data-testid="light-mode-button"]:visible');
+    const darkButton = page.locator('[data-testid="dark-mode-button"]:visible');
+    const systemButton = page.locator('[data-testid="system-mode-button"]:visible');
 
     // Check that all buttons have aria-labels
     await expect(lightButton).toHaveAttribute('aria-label', 'Switch to light mode');
@@ -124,7 +124,7 @@ test.describe('Theme Switching', () => {
     });
 
     // Switch to dark mode
-    const darkButton = page.getByTestId('dark-mode-button');
+    const darkButton = page.locator('[data-testid="dark-mode-button"]:visible');
     await darkButton.click();
     await page.waitForTimeout(100);
 

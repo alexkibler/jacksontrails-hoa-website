@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState } from 'react'
 import { submitContactForm } from '@/app/contact/actions'
 
 export function ContactForm() {
-  const [isPending, startTransition] = useTransition()
+  const [isPending, setIsPending] = useState(false)
   const [status, setStatus] = useState<{
     type: 'success' | 'error' | null
     message: string
@@ -13,26 +13,25 @@ export function ContactForm() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setStatus({ type: null, message: '' })
+    setIsPending(true)
 
     const formData = new FormData(event.currentTarget)
+    const result = await submitContactForm(formData)
 
-    startTransition(async () => {
-      const result = await submitContactForm(formData)
-
-      if (result.success) {
-        setStatus({
-          type: 'success',
-          message: 'Message sent successfully! We\'ll get back to you soon.',
-        })
-        // Reset form
-        event.currentTarget.reset()
-      } else {
-        setStatus({
-          type: 'error',
-          message: result.error || 'Failed to send message. Please try again.',
-        })
-      }
-    })
+    if (result.success) {
+      setStatus({
+        type: 'success',
+        message: "Message sent successfully! We'll get back to you soon.",
+      })
+      // Reset form
+      ;(event.target as HTMLFormElement).reset()
+    } else {
+      setStatus({
+        type: 'error',
+        message: result.error || 'Failed to send message. Please try again.',
+      })
+    }
+    setIsPending(false)
   }
 
   return (

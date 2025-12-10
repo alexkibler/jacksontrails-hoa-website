@@ -19,6 +19,7 @@ if [ -d "/mnt/prod_data" ] && [ "$(ls -A /mnt/prod_data)" ]; then
     echo "✅ Dev environment hydrated successfully!"
 else
     echo "ℹ️  No production data found. Starting with fresh database."
+    /usr/local/bin/pocketbase migrate
 fi
 
 echo "=================================================="

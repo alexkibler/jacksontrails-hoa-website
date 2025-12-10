@@ -1,10 +1,10 @@
-import { render, screen, fireEvent, within } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { DocumentsFilter } from '@/components/DocumentsFilter'
 import { Document } from '@/lib/pocketbase'
 
 // Mock the getFileUrl function
 jest.mock('@/lib/pocketbase', () => ({
-  ...jest.requireActual('@/lib/pocketbase'),
   getFileUrl: (record: any, filename: string) =>
     `http://localhost:8090/api/files/${record.id}/${filename}`,
 }))
@@ -53,11 +53,12 @@ describe('DocumentsFilter', () => {
 
   it('should render all documents by default', () => {
     render(<DocumentsFilter documents={mockDocuments} />)
+    const table = screen.getByTestId('documents-table')
 
-    expect(screen.getByText('January 2024 Meeting Minutes')).toBeInTheDocument()
-    expect(screen.getByText('HOA Bylaws')).toBeInTheDocument()
-    expect(screen.getByText('Q4 2023 Financial Report')).toBeInTheDocument()
-    expect(screen.getByText('Architectural Guidelines')).toBeInTheDocument()
+    expect(within(table).getByText('January 2024 Meeting Minutes')).toBeInTheDocument()
+    expect(within(table).getByText('HOA Bylaws')).toBeInTheDocument()
+    expect(within(table).getByText('Q4 2023 Financial Report')).toBeInTheDocument()
+    expect(within(table).getByText('Architectural Guidelines', { selector: 'div' })).toBeInTheDocument()
   })
 
   it('should show correct document count', () => {
@@ -66,59 +67,66 @@ describe('DocumentsFilter', () => {
     expect(screen.getByText(`Showing 4 of 4 documents`)).toBeInTheDocument()
   })
 
-  it('should filter documents by search term', () => {
+  it('should filter documents by search term', async () => {
+    const user = userEvent.setup()
     render(<DocumentsFilter documents={mockDocuments} />)
 
     const searchInput = screen.getByTestId('search-input')
-    fireEvent.change(searchInput, { target: { value: 'Financial' } })
+    await user.type(searchInput, 'Financial')
 
     expect(screen.getByText('Q4 2023 Financial Report')).toBeInTheDocument()
     expect(screen.queryByText('HOA Bylaws')).not.toBeInTheDocument()
     expect(screen.getByText('Showing 1 of 4 documents')).toBeInTheDocument()
   })
 
-  it('should filter documents by category', () => {
+  it('should filter documents by category', async () => {
+    const user = userEvent.setup()
     render(<DocumentsFilter documents={mockDocuments} />)
 
     const categoryFilter = screen.getByTestId('category-filter')
-    fireEvent.change(categoryFilter, { target: { value: 'Meeting Minutes' } })
+    await user.selectOptions(categoryFilter, 'Meeting Minutes')
 
     expect(screen.getByText('January 2024 Meeting Minutes')).toBeInTheDocument()
     expect(screen.queryByText('HOA Bylaws')).not.toBeInTheDocument()
     expect(screen.getByText('Showing 1 of 4 documents')).toBeInTheDocument()
   })
 
-  it('should filter documents by year', () => {
+  it('should filter documents by year', async () => {
+    const user = userEvent.setup()
     render(<DocumentsFilter documents={mockDocuments} />)
 
     const yearFilter = screen.getByTestId('year-filter')
-    fireEvent.change(yearFilter, { target: { value: '2024' } })
+    await user.selectOptions(yearFilter, '2024')
 
-    expect(screen.getByText('January 2024 Meeting Minutes')).toBeInTheDocument()
-    expect(screen.getByText('Architectural Guidelines')).toBeInTheDocument()
-    expect(screen.queryByText('HOA Bylaws')).not.toBeInTheDocument()
+    const table = screen.getByTestId('documents-table')
+    expect(within(table).getByText('January 2024 Meeting Minutes')).toBeInTheDocument()
+    expect(within(table).getByText('Architectural Guidelines', { selector: 'div' })).toBeInTheDocument()
+    expect(within(table).queryByText('HOA Bylaws')).not.toBeInTheDocument()
     expect(screen.getByText('Showing 2 of 4 documents')).toBeInTheDocument()
   })
 
-  it('should combine multiple filters', () => {
+  it('should combine multiple filters', async () => {
+    const user = userEvent.setup()
     render(<DocumentsFilter documents={mockDocuments} />)
 
     const searchInput = screen.getByTestId('search-input')
     const yearFilter = screen.getByTestId('year-filter')
 
-    fireEvent.change(yearFilter, { target: { value: '2024' } })
-    fireEvent.change(searchInput, { target: { value: 'Meeting' } })
+    await user.selectOptions(yearFilter, '2024')
+    await user.type(searchInput, 'Meeting')
 
-    expect(screen.getByText('January 2024 Meeting Minutes')).toBeInTheDocument()
-    expect(screen.queryByText('Architectural Guidelines')).not.toBeInTheDocument()
+    const table = screen.getByTestId('documents-table')
+    expect(within(table).getByText('January 2024 Meeting Minutes')).toBeInTheDocument()
+    expect(within(table).queryByText('Architectural Guidelines')).not.toBeInTheDocument()
     expect(screen.getByText('Showing 1 of 4 documents')).toBeInTheDocument()
   })
 
-  it('should show "no documents" message when no matches', () => {
+  it('should show "no documents" message when no matches', async () => {
+    const user = userEvent.setup()
     render(<DocumentsFilter documents={mockDocuments} />)
 
     const searchInput = screen.getByTestId('search-input')
-    fireEvent.change(searchInput, { target: { value: 'nonexistent' } })
+    await user.type(searchInput, 'nonexistent')
 
     expect(
       screen.getByText('No documents found matching your filters.')
@@ -143,11 +151,12 @@ describe('DocumentsFilter', () => {
 
   it('should display category badges', () => {
     render(<DocumentsFilter documents={mockDocuments} />)
+    const table = screen.getByTestId('documents-table')
 
-    expect(screen.getByText('Meeting Minutes')).toBeInTheDocument()
-    expect(screen.getByText('Bylaws')).toBeInTheDocument()
-    expect(screen.getByText('Financial Reports')).toBeInTheDocument()
-    expect(screen.getByText('Architectural Guidelines')).toBeInTheDocument()
+    expect(within(table).getByText('Meeting Minutes', { selector: 'span' })).toBeInTheDocument()
+    expect(within(table).getByText('Bylaws', { selector: 'span' })).toBeInTheDocument()
+    expect(within(table).getByText('Financial Reports', { selector: 'span' })).toBeInTheDocument()
+    expect(within(table).getByText('Architectural Guidelines', { selector: 'span' })).toBeInTheDocument()
   })
 
   it('should show document descriptions when available', () => {
@@ -182,21 +191,22 @@ describe('DocumentsFilter', () => {
     expect(options[2]).toHaveTextContent('2023')
   })
 
-  it('should reset filters to show all documents', () => {
+  it('should reset filters to show all documents', async () => {
+    const user = userEvent.setup()
     render(<DocumentsFilter documents={mockDocuments} />)
 
     // Apply filters
     const searchInput = screen.getByTestId('search-input')
     const categoryFilter = screen.getByTestId('category-filter')
 
-    fireEvent.change(searchInput, { target: { value: 'Financial' } })
-    fireEvent.change(categoryFilter, { target: { value: 'Financial Reports' } })
+    await user.type(searchInput, 'Financial')
+    await user.selectOptions(categoryFilter, 'Financial Reports')
 
     expect(screen.getByText('Showing 1 of 4 documents')).toBeInTheDocument()
 
     // Reset filters
-    fireEvent.change(searchInput, { target: { value: '' } })
-    fireEvent.change(categoryFilter, { target: { value: 'All' } })
+    await user.clear(searchInput)
+    await user.selectOptions(categoryFilter, 'All')
 
     expect(screen.getByText('Showing 4 of 4 documents')).toBeInTheDocument()
   })

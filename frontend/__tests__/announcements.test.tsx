@@ -60,6 +60,7 @@ describe('Announcements', () => {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
+      timeZone: 'UTC',
     })
 
     expect(formatted).toBe('May 15, 2024')

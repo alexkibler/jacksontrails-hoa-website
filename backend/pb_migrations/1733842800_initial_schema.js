@@ -55,7 +55,7 @@ migrate((db) => {
     deleteRule: null   // Admin only
   });
 
-  db.saveCollection(announcements);
+  db.collections.save(announcements);
 
   // Create documents collection
   const documents = new Collection({
@@ -126,7 +126,7 @@ migrate((db) => {
     deleteRule: null   // Admin only
   });
 
-  db.saveCollection(documents);
+  db.collections.save(documents);
 
   return true;
 }, (db) => {
