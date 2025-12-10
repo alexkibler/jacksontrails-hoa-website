@@ -9,6 +9,10 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-lora)', 'Georgia', 'serif'],
+      },
       colors: {
         // Jackson Trails Forest Theme - REI catalog meets City Hall
         // Established, calm, and expensive - nice trees and good property values
