@@ -40,7 +40,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="name"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          className="block text-sm font-medium text-jt-stone-700 dark:text-jt-stone-300 mb-2"
         >
           Name *
         </label>
@@ -51,9 +51,9 @@ export function ContactForm() {
           required
           disabled={isPending}
           data-testid="name-input"
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md
-            bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-            focus:ring-2 focus:ring-jt-blue-500 focus:border-transparent
+          className="w-full px-4 py-2 border border-jt-stone-300 dark:border-jt-stone-600 rounded-md
+            bg-white dark:bg-jt-stone-700 text-jt-stone-900 dark:text-white
+            focus:ring-2 focus:ring-jt-emerald-500 focus:border-transparent
             disabled:opacity-50 disabled:cursor-not-allowed"
           placeholder="Your name"
         />
@@ -63,7 +63,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="email"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          className="block text-sm font-medium text-jt-stone-700 dark:text-jt-stone-300 mb-2"
         >
           Email *
         </label>
@@ -74,9 +74,9 @@ export function ContactForm() {
           required
           disabled={isPending}
           data-testid="email-input"
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md
-            bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-            focus:ring-2 focus:ring-jt-blue-500 focus:border-transparent
+          className="w-full px-4 py-2 border border-jt-stone-300 dark:border-jt-stone-600 rounded-md
+            bg-white dark:bg-jt-stone-700 text-jt-stone-900 dark:text-white
+            focus:ring-2 focus:ring-jt-emerald-500 focus:border-transparent
             disabled:opacity-50 disabled:cursor-not-allowed"
           placeholder="your.email@example.com"
         />
@@ -86,7 +86,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="subject"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          className="block text-sm font-medium text-jt-stone-700 dark:text-jt-stone-300 mb-2"
         >
           Subject *
         </label>
@@ -97,9 +97,9 @@ export function ContactForm() {
           required
           disabled={isPending}
           data-testid="subject-input"
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md
-            bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-            focus:ring-2 focus:ring-jt-blue-500 focus:border-transparent
+          className="w-full px-4 py-2 border border-jt-stone-300 dark:border-jt-stone-600 rounded-md
+            bg-white dark:bg-jt-stone-700 text-jt-stone-900 dark:text-white
+            focus:ring-2 focus:ring-jt-emerald-500 focus:border-transparent
             disabled:opacity-50 disabled:cursor-not-allowed"
           placeholder="What is this about?"
         />
@@ -109,7 +109,7 @@ export function ContactForm() {
       <div>
         <label
           htmlFor="message"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          className="block text-sm font-medium text-jt-stone-700 dark:text-jt-stone-300 mb-2"
         >
           Message *
         </label>
@@ -121,14 +121,14 @@ export function ContactForm() {
           data-testid="message-input"
           rows={6}
           maxLength={5000}
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md
-            bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-            focus:ring-2 focus:ring-jt-blue-500 focus:border-transparent
+          className="w-full px-4 py-2 border border-jt-stone-300 dark:border-jt-stone-600 rounded-md
+            bg-white dark:bg-jt-stone-700 text-jt-stone-900 dark:text-white
+            focus:ring-2 focus:ring-jt-emerald-500 focus:border-transparent
             disabled:opacity-50 disabled:cursor-not-allowed
             custom-scrollbar"
           placeholder="Your message..."
         />
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+        <p className="mt-1 text-sm text-jt-stone-500 dark:text-jt-stone-400">
           Maximum 5000 characters
         </p>
       </div>
@@ -153,9 +153,9 @@ export function ContactForm() {
           type="submit"
           disabled={isPending}
           data-testid="submit-button"
-          className="w-full px-6 py-3 bg-jt-blue-900 text-white rounded-md font-semibold
-            hover:bg-jt-blue-800 dark:bg-jt-blue-700 dark:hover:bg-jt-blue-600
-            focus:outline-none focus:ring-2 focus:ring-jt-blue-500 focus:ring-offset-2
+          className="w-full px-6 py-3 bg-jt-emerald-600 text-white rounded-md font-semibold
+            hover:bg-jt-emerald-700 dark:bg-jt-emerald-600 dark:hover:bg-jt-emerald-700
+            focus:outline-none focus:ring-2 focus:ring-jt-emerald-500 focus:ring-offset-2
             disabled:opacity-50 disabled:cursor-not-allowed
             transition-colors"
         >
@@ -164,7 +164,7 @@ export function ContactForm() {
       </div>
 
       {/* Privacy Notice */}
-      <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+      <p className="text-sm text-jt-stone-500 dark:text-jt-stone-400 text-center">
         Your message will be sent directly to the HOA board. We do not store your information.
       </p>
     </form>
