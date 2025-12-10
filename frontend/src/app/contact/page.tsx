@@ -14,7 +14,7 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            Have a question or concern? Send us a message and we'll get back to you as soon as possible.
+            Have a question or concern? Send us a message and we&apos;ll get back to you as soon as possible.
           </p>
         </div>
 
