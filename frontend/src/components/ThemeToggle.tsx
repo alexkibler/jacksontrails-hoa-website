@@ -11,7 +11,7 @@ export function ThemeToggle() {
         onClick={() => setTheme('light')}
         className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
           theme === 'light'
-            ? 'bg-jt-blue-900 text-white dark:bg-jt-blue-700'
+            ? 'bg-jt-forest-900 text-white dark:bg-jt-emerald-600 dark:text-white'
             : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
         }`}
         aria-label="Switch to light mode"
@@ -23,7 +23,7 @@ export function ThemeToggle() {
         onClick={() => setTheme('dark')}
         className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
           theme === 'dark'
-            ? 'bg-jt-blue-900 text-white dark:bg-jt-blue-700'
+            ? 'bg-jt-forest-900 text-white dark:bg-jt-emerald-600 dark:text-white'
             : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
         }`}
         aria-label="Switch to dark mode"
@@ -35,7 +35,7 @@ export function ThemeToggle() {
         onClick={() => setTheme('system')}
         className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
           theme === 'system'
-            ? 'bg-jt-blue-900 text-white dark:bg-jt-blue-700'
+            ? 'bg-jt-forest-900 text-white dark:bg-jt-emerald-600 dark:text-white'
             : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
         }`}
         aria-label="Use system theme preference"
