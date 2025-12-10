@@ -1,20 +1,8 @@
 import type { Metadata } from 'next'
-import { Inter, Lora } from 'next/font/google'
+import './fonts.css'
 import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { Navigation } from '@/components/Navigation'
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-})
-
-const lora = Lora({
-  subsets: ['latin'],
-  variable: '--font-lora',
-  display: 'swap',
-})
 
 export const metadata: Metadata = {
   title: 'Jackson Trails HOA',
@@ -28,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${lora.variable} font-sans`}>
+      <body className="font-sans">
         <ThemeProvider>
           <div className="min-h-screen flex flex-col">
             <Navigation />
