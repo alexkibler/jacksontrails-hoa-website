@@ -18,7 +18,7 @@ cd /Volumes/1TB/Repos/nginx-proxy-manager
 docker compose up -d hoa-backend hoa-frontend
 ```
 - Frontend: http://localhost:3000 (or via proxy at https://jacksontrails.org)
-- Backend Admin: http://localhost:8090/_/ (or via proxy at https://hoa-admin.alexkibler.com)
+- Backend Admin: http://localhost:8092/_/ (or via proxy at https://hoa-admin.alexkibler.com)
 
 **Stop services**:
 ```bash
@@ -119,11 +119,11 @@ All settings are environment-variable driven. Key variables are now in `/Volumes
 
 The docker-compose service definitions include:
 - `POCKETBASE_URL=http://hoa-backend:8090` - Internal container network URL
-- Port mappings: 3000 (frontend), 8090 (backend admin)
+- Port mappings: 3000 (frontend), 8092 (backend admin exposed on host)
 
 **Production environment**:
 - Data persisted in `/Volumes/1TB/Repos/jacksontrails-hoa-website/pb_data` (gitignored)
-- Accessed via admin panel at `http://localhost:8090/_/` or `https://hoa-admin.alexkibler.com`
+- Accessed via admin panel at `http://localhost:8092/_/` or `https://hoa-admin.alexkibler.com`
 - Services managed by nginx-proxy-manager with automatic SSL via Let's Encrypt
 
 ## Testing Requirements
@@ -233,7 +233,7 @@ Watchtower is configured to automatically pull and deploy new images tagged with
    cd /Volumes/1TB/Repos/nginx-proxy-manager
    docker compose up -d hoa-backend hoa-frontend
    ```
-3. Access PocketBase admin: `http://localhost:8090/_/` or `https://hoa-admin.alexkibler.com`
+3. Access PocketBase admin: `http://localhost:8092/_/` or `https://hoa-admin.alexkibler.com`
 4. Create admin account
 5. Add initial announcements and documents via admin panel
 6. Configure nginx-proxy-manager proxy hosts for `jacksontrails.org` and `hoa-admin.alexkibler.com`
