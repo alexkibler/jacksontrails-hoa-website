@@ -9,10 +9,12 @@ RUN apk add --no-cache \
 
 # Download and install PocketBase
 ARG PB_VERSION=0.22.0
-RUN wget https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip \
-    && unzip pocketbase_${PB_VERSION}_linux_amd64.zip -d /usr/local/bin/ \
-    && chmod +x /usr/local/bin/pocketbase \
-    && rm pocketbase_${PB_VERSION}_linux_amd64.zip
+ARG TARGETARCH
+RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "arm64" || echo "amd64") && \
+    wget https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_${ARCH}.zip && \
+    unzip pocketbase_${PB_VERSION}_linux_${ARCH}.zip -d /usr/local/bin/ && \
+    chmod +x /usr/local/bin/pocketbase && \
+    rm pocketbase_${PB_VERSION}_linux_${ARCH}.zip
 
 # Create app directory
 WORKDIR /pb
