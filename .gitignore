@@ -28,6 +28,13 @@ yarn-error.log*
 .env*.local
 .env
 
+# pocketbase data
+pb_data/
+pb_data_dev/
+*.db
+*.db-shm
+*.db-wal
+
 # vercel
 .vercel
 

@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # PRODUCTION SERVICES
+  # ==========================================
+
+  hoa-backend:
+    image: ghcr.io/${GHCR_USERNAME}/jackson-trails-backend:latest
+    container_name: hoa-backend
+    profiles: ["prod"]
+    restart: unless-stopped
+    ports:
+      - "${PROD_BACKEND_PORT}:8090"
+    volumes:
+      - ./pb_data:/pb/pb_data
+    environment:
+      - TZ=America/New_York
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - hoa-network
+
+  hoa-frontend:
+    image: ghcr.io/${GHCR_USERNAME}/jackson-trails-frontend:latest
+    container_name: hoa-frontend
+    profiles: ["prod"]
+    restart: unless-stopped
+    ports:
+      - "${PROD_FRONTEND_PORT}:3000"
+    environment:
+      - POCKETBASE_URL=${POCKETBASE_URL}
+      - PUBLIC_SITE_URL=${PUBLIC_SITE_URL}
+      - PUBLIC_SITE_NAME=${PUBLIC_SITE_NAME}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_SECURE=${SMTP_SECURE}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - FROM_EMAIL=${FROM_EMAIL}
+      - BOARD_EMAIL=${BOARD_EMAIL}
+      - NODE_ENV=production
+    depends_on:
+      - hoa-backend
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - hoa-network
+
+  # ==========================================
+  # DEVELOPMENT SERVICES (Auto-Clone)
+  # ==========================================
+
+  hoa-backend-dev:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hoa-backend-dev
+    profiles: ["dev"]
+    restart: unless-stopped
+    ports:
+      - "${DEV_BACKEND_PORT}:8090"
+    volumes:
+      # Mount production data as READ-ONLY
+      - ./pb_data:/mnt/prod_data:ro
+      # Separate read-write volume for dev
+      - ./pb_data_dev:/pb/pb_data
+    environment:
+      - TZ=America/New_York
+    # Use custom entrypoint to hydrate from prod data
+    entrypoint: ["/pb/scripts/dev-entrypoint.sh"]
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - hoa-network
+
+  hoa-frontend-dev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: hoa-frontend-dev
+    profiles: ["dev"]
+    restart: unless-stopped
+    ports:
+      - "${DEV_FRONTEND_PORT}:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - POCKETBASE_URL=${POCKETBASE_URL_DEV}
+      - PUBLIC_SITE_URL=http://localhost:${DEV_FRONTEND_PORT}
+      - PUBLIC_SITE_NAME=${PUBLIC_SITE_NAME}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_SECURE=${SMTP_SECURE}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - FROM_EMAIL=${FROM_EMAIL}
+      - BOARD_EMAIL=${BOARD_EMAIL}
+      - NODE_ENV=development
+    depends_on:
+      - hoa-backend-dev
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    networks:
+      - hoa-network
+
+networks:
+  hoa-network:
+    driver: bridge

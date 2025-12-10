@@ -1,0 +1,36 @@
+import PocketBase from 'pocketbase'
+
+// Server-side PocketBase client (uses internal Docker network URL)
+export function getPocketBase() {
+  const url = process.env.POCKETBASE_URL || 'http://hoa-backend:8090'
+  return new PocketBase(url)
+}
+
+// Types for our collections
+export interface Announcement {
+  id: string
+  title: string
+  slug: string
+  content: string
+  published_date: string
+  featured?: boolean
+  created: string
+  updated: string
+}
+
+export interface Document {
+  id: string
+  title: string
+  category: 'Meeting Minutes' | 'Bylaws' | 'Financial Reports' | 'Architectural Guidelines'
+  year: number
+  file: string
+  description?: string
+  created: string
+  updated: string
+}
+
+// Helper to get file URL
+export function getFileUrl(record: any, filename: string): string {
+  const pb = getPocketBase()
+  return pb.getFileUrl(record, filename)
+}
