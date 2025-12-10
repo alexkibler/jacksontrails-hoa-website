@@ -44,13 +44,13 @@ export function DocumentsFilter({ documents }: DocumentsFilterProps) {
   return (
     <div>
       {/* Filters */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+      <div className="bg-white dark:bg-jt-stone-800 rounded-lg shadow-md p-6 mb-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search */}
           <div>
             <label
               htmlFor="search"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              className="block text-sm font-medium text-jt-stone-700 dark:text-jt-stone-300 mb-2"
             >
               Search
             </label>
@@ -61,9 +61,9 @@ export function DocumentsFilter({ documents }: DocumentsFilterProps) {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search documents..."
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md
-                bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                focus:ring-2 focus:ring-jt-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-jt-stone-300 dark:border-jt-stone-600 rounded-md
+                bg-white dark:bg-jt-stone-700 text-jt-stone-900 dark:text-white
+                focus:ring-2 focus:ring-jt-emerald-500 focus:border-transparent"
             />
           </div>
 
@@ -71,7 +71,7 @@ export function DocumentsFilter({ documents }: DocumentsFilterProps) {
           <div>
             <label
               htmlFor="category"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              className="block text-sm font-medium text-jt-stone-700 dark:text-jt-stone-300 mb-2"
             >
               Category
             </label>
@@ -80,9 +80,9 @@ export function DocumentsFilter({ documents }: DocumentsFilterProps) {
               data-testid="category-filter"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md
-                bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                focus:ring-2 focus:ring-jt-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-jt-stone-300 dark:border-jt-stone-600 rounded-md
+                bg-white dark:bg-jt-stone-700 text-jt-stone-900 dark:text-white
+                focus:ring-2 focus:ring-jt-emerald-500 focus:border-transparent"
             >
               {categories.map((category) => (
                 <option key={category} value={category}>
@@ -96,7 +96,7 @@ export function DocumentsFilter({ documents }: DocumentsFilterProps) {
           <div>
             <label
               htmlFor="year"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+              className="block text-sm font-medium text-jt-stone-700 dark:text-jt-stone-300 mb-2"
             >
               Year
             </label>
@@ -105,9 +105,9 @@ export function DocumentsFilter({ documents }: DocumentsFilterProps) {
               data-testid="year-filter"
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md
-                bg-white dark:bg-gray-700 text-gray-900 dark:text-white
-                focus:ring-2 focus:ring-jt-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-jt-stone-300 dark:border-jt-stone-600 rounded-md
+                bg-white dark:bg-jt-stone-700 text-jt-stone-900 dark:text-white
+                focus:ring-2 focus:ring-jt-emerald-500 focus:border-transparent"
             >
               {years.map((year) => (
                 <option key={year} value={year}>
@@ -119,60 +119,60 @@ export function DocumentsFilter({ documents }: DocumentsFilterProps) {
         </div>
 
         {/* Results Count */}
-        <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+        <div className="mt-4 text-sm text-jt-stone-600 dark:text-jt-stone-400">
           Showing {filteredDocuments.length} of {documents.length} documents
         </div>
       </div>
 
       {/* Documents Table */}
       {filteredDocuments.length === 0 ? (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
-          <p className="text-gray-600 dark:text-gray-400 text-lg">
+        <div className="bg-white dark:bg-jt-stone-800 rounded-lg shadow-md p-12 text-center">
+          <p className="text-jt-stone-600 dark:text-jt-stone-400 text-lg">
             No documents found matching your filters.
           </p>
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white dark:bg-jt-stone-800 rounded-lg shadow-md overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full" data-testid="documents-table">
-              <thead className="bg-gray-50 dark:bg-gray-700">
+              <thead className="bg-jt-stone-50 dark:bg-jt-stone-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-jt-stone-500 dark:text-jt-stone-300 uppercase tracking-wider">
                     Title
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-jt-stone-500 dark:text-jt-stone-300 uppercase tracking-wider">
                     Category
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-jt-stone-500 dark:text-jt-stone-300 uppercase tracking-wider">
                     Year
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-jt-stone-500 dark:text-jt-stone-300 uppercase tracking-wider">
                     Action
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+              <tbody className="divide-y divide-jt-stone-200 dark:divide-jt-stone-700">
                 {filteredDocuments.map((doc) => (
                   <tr
                     key={doc.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    className="hover:bg-jt-stone-50 dark:hover:bg-jt-stone-700 transition-colors"
                   >
                     <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                      <div className="text-sm font-medium text-jt-stone-900 dark:text-white">
                         {doc.title}
                       </div>
                       {doc.description && (
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                        <div className="text-sm text-jt-stone-500 dark:text-jt-stone-400">
                           {doc.description}
                         </div>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jt-blue-100 dark:bg-jt-blue-900 text-jt-blue-800 dark:text-jt-blue-200">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-jt-emerald-100 dark:bg-jt-emerald-900 text-jt-emerald-800 dark:text-jt-emerald-200">
                         {doc.category}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-jt-stone-500 dark:text-jt-stone-400">
                       {doc.year}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -180,7 +180,7 @@ export function DocumentsFilter({ documents }: DocumentsFilterProps) {
                         href={getFileUrl(doc, doc.file)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-jt-blue-700 dark:text-jt-sunset-400 hover:underline font-medium"
+                        className="text-jt-emerald-600 dark:text-jt-emerald-400 hover:underline font-medium"
                       >
                         Download PDF →
                       </a>

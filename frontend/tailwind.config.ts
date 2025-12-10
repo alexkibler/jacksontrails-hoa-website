@@ -9,63 +9,55 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-lora)', 'Georgia', 'serif'],
+      },
       colors: {
-        // Jackson Trails Brand Colors (from neighborhood sign)
-        'jt-blue': {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a', // Deep blue from sign
-          950: '#172554',
+        // Jackson Trails Forest Theme - REI catalog meets City Hall
+        // Established, calm, and expensive - nice trees and good property values
+        'jt-forest': {
+          50: '#f6f7f6',
+          100: '#e3e7e3',
+          200: '#c7cec7',
+          300: '#a1aea2',
+          400: '#7a8a7c',
+          500: '#5f6f61',
+          600: '#4a584c',
+          700: '#3c473e',
+          800: '#323a33',
+          900: '#14532d', // Deep forest green for headers/hero
+          950: '#0a2818',
         },
-        'jt-sunset': {
-          50: '#fdf4ff',
-          100: '#fae8ff',
-          200: '#f5d0fe',
-          300: '#f0abfc',
-          400: '#e879f9', // Purple from sunset
-          500: '#d946ef',
-          600: '#c026d3',
-          700: '#a21caf',
-          800: '#86198f',
-          900: '#701a75',
-          950: '#4a044e',
+        'jt-emerald': {
+          50: '#ecfdf5',
+          100: '#d1fae5',
+          200: '#a7f3d0',
+          300: '#6ee7b7',
+          400: '#34d399',
+          500: '#10b981',
+          600: '#059669', // Vibrant but natural green for buttons/accents
+          700: '#047857',
+          800: '#065f46',
+          900: '#064e3b',
+          950: '#022c22',
         },
-        'jt-orange': {
-          50: '#fff7ed',
-          100: '#ffedd5',
-          200: '#fed7aa',
-          300: '#fdba74',
-          400: '#fb923c',
-          500: '#f97316', // Sunset orange
-          600: '#ea580c',
-          700: '#c2410c',
-          800: '#9a3412',
-          900: '#7c2d12',
-          950: '#431407',
-        },
-        'jt-pink': {
-          50: '#fdf2f8',
-          100: '#fce7f3',
-          200: '#fbcfe8',
-          300: '#f9a8d4',
-          400: '#f472b6',
-          500: '#ec4899', // Sunset pink
-          600: '#db2777',
-          700: '#be185d',
-          800: '#9f1239',
-          900: '#831843',
-          950: '#500724',
+        'jt-stone': {
+          50: '#fafaf9', // Warm off-white backgrounds
+          100: '#f5f5f4',
+          200: '#e7e5e4',
+          300: '#d6d3d1',
+          400: '#a8a29e',
+          500: '#78716c',
+          600: '#57534e',
+          700: '#44403c', // Softer text color
+          800: '#292524',
+          900: '#1c1917', // Deep stone for headers
+          950: '#0c0a09',
         },
       },
       backgroundImage: {
-        'gradient-sunset': 'linear-gradient(135deg, #e879f9 0%, #ec4899 50%, #f97316 100%)',
+        'gradient-forest': 'linear-gradient(135deg, #14532d 0%, #059669 100%)',
       },
     },
   },
