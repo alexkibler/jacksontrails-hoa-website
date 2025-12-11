@@ -16,6 +16,9 @@ COPY go.mod ./
 # Copy the source code
 COPY . .
 
+# Debug: List migration files
+RUN ls -la migrations/*.go
+
 # Download dependencies
 RUN go mod tidy
 

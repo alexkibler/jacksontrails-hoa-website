@@ -52,6 +52,11 @@ export default function RootLayout({
                         </a>
                       </li>
                       <li>
+                        <a href="/about/board" className="text-jt-stone-600 dark:text-jt-stone-400 hover:text-jt-emerald-600 dark:hover:text-jt-emerald-400">
+                          About The Board
+                        </a>
+                      </li>
+                      <li>
                         <a href="/contact" className="text-jt-stone-600 dark:text-jt-stone-400 hover:text-jt-emerald-600 dark:hover:text-jt-emerald-400">
                           Contact Us
                         </a>

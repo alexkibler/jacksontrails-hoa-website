@@ -110,3 +110,42 @@ See `frontend/src/app/pb/[[...path]]/route.ts` for the complete proxy implementa
 - **Runtime vs Build Time:** Environment variables needed for routing must be accessed at runtime via API routes, not build-time configuration
 - **Header Preservation:** File downloads require careful preservation of headers like `Content-Disposition`, `Content-Type`, and `Range` for proper browser handling
 - **Testing Standalone Builds:** Always test the standalone build output locally before deploying to catch issues like missing rewrites
+
+## Troubleshooting Log - 2025-12-11: Migrations Not Being Picked Up & Duplicate Field Conflicts
+
+**Problem:**
+After adding new migration files (`1733931600_board_members.go` and `1734000000_update_board_members.go`), only the first three migrations were running in production. The fourth migration wasn't being registered or executed, despite the file existing in the codebase.
+
+**Root Cause Analysis:**
+- **Stale Docker Image:** The production container was running an **old Docker image** built before the new migration files were created. Go migrations are compiled into the PocketBase binary at build time, so runtime changes to migration files have no effect.
+- **Container Restart vs Recreate:** Running `docker compose restart` only restarts the existing container with the old image. It does NOT rebuild the image or use newly built images.
+- **Migration Conflict:** The fourth migration attempted to add a `headshot` field that was already defined in the third migration, creating a logical conflict that would fail silently or be ignored by PocketBase.
+
+**Evidence:**
+```bash
+# Old logs showed only 2 migrations:
+2025/12/11 19:37:02 Registering initial schema migration...
+2025/12/11 19:37:02 Registering board members migration...
+
+# Missing:
+# - "Registering board members update migration..."
+```
+
+**Resolution:**
+1. **Rebuilt Docker Image:** Ran `docker compose build hoa-backend --no-cache` to force a complete rebuild
+2. **Recreated Container:** Ran `docker compose up -d hoa-backend` to recreate the container with the new image (NOT just restart)
+3. **Fixed Duplicate Field:** Removed the redundant `AddField()` call for `headshot` from the fourth migration, since it was already created in the third migration
+
+**Changes Made:**
+1. **Image Rebuild:** Executed `docker compose build hoa-backend --no-cache` in the nginx-proxy-manager directory
+2. **Container Recreate:** Used `docker compose up -d` instead of `restart` to use the new image
+3. **Migration Fix:** Edited `1734000000_update_board_members.go` to only make the email field optional, removing the duplicate headshot field addition
+
+**Key Takeaways for Future:**
+- **Always Rebuild:** After adding or modifying Go migration files, you MUST rebuild the Docker image with `docker compose build hoa-backend` or the changes won't be included
+- **Recreate, Don't Restart:** Use `docker compose up -d` to recreate containers with new images. The `restart` command only restarts the existing container with the old image
+- **Check Build Timestamps:** Use `docker inspect <container> --format='{{.Created}}'` and compare with migration file timestamps to verify the image includes recent changes
+- **Avoid Schema Conflicts:** Before writing a new migration, review ALL previous migrations to ensure you're not duplicating fields or making conflicting changes
+- **Migration Sequence Matters:** Migrations run in timestamp order. Later migrations should only modify what earlier migrations created, never duplicate their work
+- **Verify Registration:** After deployment, check logs with `docker logs <container> | grep "Registering"` to confirm all expected migrations are being registered
+- **Read Before Modifying:** Always review the current schema created by previous migrations before adding new migration steps to avoid duplicates

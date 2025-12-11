@@ -11,6 +11,7 @@ export function Navigation() {
     { href: '/', label: 'Home' },
     { href: '/announcements', label: 'Announcements' },
     { href: '/documents', label: 'Documents' },
+    { href: '/about/board', label: 'About' },
     { href: '/contact', label: 'Contact' },
   ]
 

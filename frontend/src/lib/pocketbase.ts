@@ -54,6 +54,19 @@ export interface Document {
   updated: string
 }
 
+export interface BoardMember {
+  id: string
+  firstname: string
+  lastname: string
+  email: string
+  pronouns?: string
+  position?: string
+  bio?: string
+  order?: number
+  created: string
+  updated: string
+}
+
 // Helper to get file URL
 export function getFileUrl(record: any, filename: string): string {
   const pb = getPublicPocketBase()
