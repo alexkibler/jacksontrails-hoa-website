@@ -3,6 +3,14 @@ import userEvent from '@testing-library/user-event'
 import { DocumentsFilter } from '@/components/DocumentsFilter'
 import { Document } from '@/lib/pocketbase'
 
+// Mock next/navigation
+const mockSearchParams = new URLSearchParams()
+const mockUseSearchParams = jest.fn(() => mockSearchParams)
+
+jest.mock('next/navigation', () => ({
+  useSearchParams: () => mockUseSearchParams(),
+}))
+
 // Mock the getFileUrl function
 jest.mock('@/lib/pocketbase', () => ({
   getFileUrl: (record: any, filename: string) =>
@@ -50,6 +58,11 @@ describe('DocumentsFilter', () => {
       updated: '2024-01-01T10:00:00Z',
     },
   ]
+
+  beforeEach(() => {
+    mockSearchParams.delete('category')
+    mockUseSearchParams.mockClear()
+  })
 
   it('should render all documents by default', () => {
     render(<DocumentsFilter documents={mockDocuments} />)
@@ -209,5 +222,44 @@ describe('DocumentsFilter', () => {
     await user.selectOptions(categoryFilter, 'All')
 
     expect(screen.getByText('Showing 4 of 4 documents')).toBeInTheDocument()
+  })
+
+  it('should initialize with category from URL parameter', () => {
+    mockSearchParams.set('category', 'Bylaws')
+
+    render(<DocumentsFilter documents={mockDocuments} />)
+
+    const categoryFilter = screen.getByTestId('category-filter') as HTMLSelectElement
+    expect(categoryFilter.value).toBe('Bylaws')
+
+    // Should only show Bylaws documents
+    expect(screen.getByText('HOA Bylaws')).toBeInTheDocument()
+    expect(screen.queryByText('January 2024 Meeting Minutes')).not.toBeInTheDocument()
+    expect(screen.getByText('Showing 1 of 4 documents')).toBeInTheDocument()
+  })
+
+  it('should handle invalid category URL parameter', () => {
+    mockSearchParams.set('category', 'InvalidCategory')
+
+    render(<DocumentsFilter documents={mockDocuments} />)
+
+    const categoryFilter = screen.getByTestId('category-filter') as HTMLSelectElement
+    expect(categoryFilter.value).toBe('All')
+
+    // Should show all documents when category is invalid
+    expect(screen.getByText('Showing 4 of 4 documents')).toBeInTheDocument()
+  })
+
+  it('should handle multiple valid category URL parameters', () => {
+    mockSearchParams.set('category', 'Meeting Minutes')
+
+    render(<DocumentsFilter documents={mockDocuments} />)
+
+    const categoryFilter = screen.getByTestId('category-filter') as HTMLSelectElement
+    expect(categoryFilter.value).toBe('Meeting Minutes')
+
+    expect(screen.getByText('January 2024 Meeting Minutes')).toBeInTheDocument()
+    expect(screen.queryByText('HOA Bylaws')).not.toBeInTheDocument()
+    expect(screen.getByText('Showing 1 of 4 documents')).toBeInTheDocument()
   })
 })
