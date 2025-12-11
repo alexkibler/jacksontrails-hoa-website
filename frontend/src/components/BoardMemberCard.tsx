@@ -1,4 +1,5 @@
-import { BoardMember } from '@/lib/pocketbase'
+import { BoardMember, getFileUrl } from '@/lib/pocketbase'
+import Image from 'next/image'
 
 interface BoardMemberCardProps {
   member: BoardMember
@@ -10,8 +11,23 @@ export function BoardMemberCard({ member }: BoardMemberCardProps) {
     ? `${fullName} (${member.pronouns})`
     : fullName
 
+  const headshotUrl = member.headshot
+    ? getFileUrl(member, member.headshot)
+    : null
+
   return (
     <div className="bg-white dark:bg-jt-stone-800 rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col">
+      {headshotUrl && (
+        <div className="relative w-full h-64 bg-jt-stone-100 dark:bg-jt-stone-900">
+          <Image
+            src={headshotUrl}
+            alt={`Headshot of ${fullName}`}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </div>
+      )}
       <div className="p-6 flex-1 flex flex-col">
         {/* Name and Position */}
         <div className="mb-4">
