@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Document, getFileUrl } from '@/lib/pocketbase'
 
 interface DocumentsFilterProps {
@@ -16,9 +17,24 @@ const categories = [
 ] as const
 
 export function DocumentsFilter({ documents }: DocumentsFilterProps) {
+  const searchParams = useSearchParams()
+  const categoryParam = searchParams.get('category')
+
+  // Initialize category from URL parameter if valid
+  const initialCategory = categoryParam && categories.includes(categoryParam as any)
+    ? categoryParam
+    : 'All'
+
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState<string>('All')
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory)
   const [selectedYear, setSelectedYear] = useState<string>('All')
+
+  // Update selected category when URL parameter changes
+  useEffect(() => {
+    if (categoryParam && categories.includes(categoryParam as any)) {
+      setSelectedCategory(categoryParam)
+    }
+  }, [categoryParam])
 
   // Get unique years from documents
   const years = useMemo(() => {
