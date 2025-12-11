@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { getPocketBase, Document } from '@/lib/pocketbase'
 import { DocumentsFilter } from '@/components/DocumentsFilter'
 
@@ -39,7 +40,9 @@ export default async function DocumentsPage() {
           </p>
         </div>
 
-        <DocumentsFilter documents={documents} />
+        <Suspense fallback={<div className="text-center py-8">Loading filters...</div>}>
+          <DocumentsFilter documents={documents} />
+        </Suspense>
       </div>
     </div>
   )
