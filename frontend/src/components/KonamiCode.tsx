@@ -69,18 +69,18 @@ export function KonamiCode() {
       ))}
 
       {/* Message box */}
-      <div className="relative bg-white dark:bg-jt-stone-800 rounded-lg shadow-2xl p-8 max-w-md mx-4 pointer-events-auto border-4 border-jt-emerald-500 animate-bounce-once">
+      <div className="relative bg-white dark:bg-jt-stone-800 rounded-lg shadow-2xl p-6 max-w-md mx-4 pointer-events-auto border-4 border-jt-emerald-500 animate-bounce-once">
         <div className="text-center">
-          <h2 className="text-4xl font-serif font-bold mb-4 bg-gradient-forest bg-clip-text text-transparent">
+          <h2 className="text-4xl font-serif font-bold mb-3 bg-gradient-forest bg-clip-text text-transparent">
             🎉 Secret Unlocked! 🎉
           </h2>
-          <p className="text-lg text-jt-stone-700 dark:text-jt-stone-300 mb-4">
+          <p className="text-lg text-jt-stone-700 dark:text-jt-stone-300 mb-3">
             Congratulations, neighbor! You&apos;ve discovered the legendary HOA Power Mode!
           </p>
-          <p className="text-sm text-jt-stone-600 dark:text-jt-stone-400 mb-4">
+          <p className="text-sm text-jt-stone-600 dark:text-jt-stone-400 mb-3">
             You are now an honorary member of the Secret Committee of Neighborly Excellence™
           </p>
-          <div className="flex justify-center my-4">
+          <div className="flex justify-center my-2">
             <video
               src="/trophy_optimized.webm"
               autoPlay
@@ -92,7 +92,7 @@ export function KonamiCode() {
           </div>
           <button
             onClick={() => setActivated(false)}
-            className="mt-6 px-6 py-2 bg-gradient-forest text-white rounded-lg hover:opacity-90 transition-opacity"
+            className="mt-4 px-6 py-2 bg-gradient-forest text-white rounded-lg hover:opacity-90 transition-opacity"
           >
             Accept This Honor
           </button>

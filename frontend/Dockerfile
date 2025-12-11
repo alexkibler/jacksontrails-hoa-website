@@ -48,6 +48,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 # Overwrite node_modules with the correct architecture from prod-deps
 COPY --from=prod-deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Copy public folder (required for standalone builds)
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 USER nextjs
 
