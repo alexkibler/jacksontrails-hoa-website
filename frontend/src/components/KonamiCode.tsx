@@ -71,9 +71,11 @@ export function KonamiCode() {
       {/* Message box */}
       <div className="relative bg-white dark:bg-jt-stone-800 rounded-lg shadow-2xl p-6 max-w-md mx-4 pointer-events-auto border-4 border-jt-emerald-500 animate-bounce-once">
         <div className="text-center">
-          <h2 className="text-4xl font-serif font-bold mb-3 bg-gradient-forest bg-clip-text text-transparent">
-            🎉 Secret Unlocked! 🎉
-          </h2>
+          <div className="mb-4">
+            <h2 className="text-4xl font-serif font-bold bg-gradient-forest bg-clip-text text-transparent inline-block">
+              Secret Unlocked!
+            </h2>
+          </div>
           <p className="text-lg text-jt-stone-700 dark:text-jt-stone-300 mb-3">
             Congratulations, neighbor! You&apos;ve discovered the legendary HOA Power Mode!
           </p>
@@ -81,13 +83,10 @@ export function KonamiCode() {
             You are now an honorary member of the Secret Committee of Neighborly Excellence™
           </p>
           <div className="flex justify-center my-2">
-            <video
-              src="/trophy_optimized.webm"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-32 h-32 object-contain"
+            <img
+              src="/andrewjackson.jpg"
+              alt="Andrew Jackson"
+              className="w-40 h-40 object-cover rounded-lg"
             />
           </div>
           <button
