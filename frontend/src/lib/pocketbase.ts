@@ -8,7 +8,9 @@ export function getPocketBase() {
 
 // Client-side/Public PocketBase client
 export function getPublicPocketBase() {
-  const url = process.env.NEXT_PUBLIC_POCKETBASE_URL || 'http://localhost:8090'
+  // Use relative path '/pb' which is rewritten by Next.js to the backend
+  // This avoids CORS issues and port mapping mismatches
+  const url = process.env.NEXT_PUBLIC_POCKETBASE_URL || '/pb'
   return new PocketBase(url)
 }
 
