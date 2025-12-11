@@ -6,6 +6,19 @@ export const dynamic = 'force-dynamic'
 async function getAllAnnouncements(): Promise<Announcement[]> {
   const url = process.env.POCKETBASE_URL || 'http://hoa-backend:8090'
   console.log(`[DEBUG] Fetching announcements from ${url}...`)
+  
+  // Test raw fetch
+  try {
+    const testUrl = `${url}/api/collections/announcements/records`
+    console.log(`[DEBUG] Testing raw fetch to ${testUrl}`)
+    const res = await fetch(testUrl)
+    console.log(`[DEBUG] Raw fetch status: ${res.status}`)
+    const data = await res.json()
+    console.log(`[DEBUG] Raw fetch data items: ${data.items?.length}`)
+  } catch (e) {
+    console.error('[DEBUG] Raw fetch failed:', e)
+  }
+
   try {
     const pb = getPocketBase()
     const records = await pb.collection('announcements').getFullList<Announcement>({
@@ -14,7 +27,7 @@ async function getAllAnnouncements(): Promise<Announcement[]> {
     console.log(`[DEBUG] Fetched ${records.length} announcements`)
     return records
   } catch (error) {
-    console.error('Failed to fetch announcements:', error)
+    console.error('Failed to fetch announcements:', JSON.stringify(error, Object.getOwnPropertyNames(error)))
     return []
   }
 }
