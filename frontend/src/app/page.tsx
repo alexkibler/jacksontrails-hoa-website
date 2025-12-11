@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { getPocketBase, Announcement } from '@/lib/pocketbase'
 
+export const dynamic = 'force-dynamic'
+
 async function getFeaturedAnnouncements(): Promise<Announcement[]> {
   try {
     const pb = getPocketBase()

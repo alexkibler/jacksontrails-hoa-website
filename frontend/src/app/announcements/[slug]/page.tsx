@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getPocketBase, Announcement } from '@/lib/pocketbase'
 
+export const dynamic = 'force-dynamic'
+
 async function getAnnouncement(slug: string): Promise<Announcement | null> {
   try {
     const pb = getPocketBase()

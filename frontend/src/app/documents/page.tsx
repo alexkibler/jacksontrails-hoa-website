@@ -1,6 +1,8 @@
 import { getPocketBase, Document } from '@/lib/pocketbase'
 import { DocumentsFilter } from '@/components/DocumentsFilter'
 
+export const dynamic = 'force-dynamic'
+
 async function getAllDocuments(): Promise<Document[]> {
   try {
     const pb = getPocketBase()
