@@ -16,9 +16,18 @@ An open-source community website built for the Jackson Trails Homeowners Associa
 ### Stack
 
 - **Frontend**: Next.js 14 (App Router), React, TypeScript, Tailwind CSS
-- **Backend**: PocketBase (embedded SQLite)
+- **Backend**: PocketBase (embedded SQLite with Go-based migrations)
 - **Infrastructure**: Docker, Nginx Proxy Manager, Watchtower
 - **CI/CD**: GitHub Actions
+
+### Frontend-Backend Communication
+
+The frontend communicates with PocketBase through a **Next.js API Route proxy** at `/pb/[[...path]]/route.ts`. This pattern is used instead of Next.js rewrites because:
+- Rewrites don't work in standalone builds (used for Docker deployments)
+- API routes can access runtime environment variables (`POCKETBASE_URL`)
+- Proper header forwarding ensures file downloads work correctly
+
+This architecture enables seamless file downloads, API calls, and maintains compatibility across development and production environments.
 
 ### Design Principles
 
@@ -113,13 +122,16 @@ npm run test:ci
 ```
 .
 ├── backend/                 # PocketBase backend
-│   ├── Dockerfile
-│   ├── pb_migrations/       # Database schema migrations
+│   ├── main.go              # Custom PocketBase binary entry point
+│   ├── migrations/          # Go-based database migrations
+│   ├── Dockerfile           # Multi-stage build
 │   └── scripts/             # Helper scripts (dev data hydration)
 │
 ├── frontend/                # Next.js frontend
 │   ├── src/
-│   │   ├── app/             # Next.js App Router pages
+│   │   ├── app/
+│   │   │   ├── pb/[[...path]]/route.ts  # PocketBase API proxy
+│   │   │   └── ...          # Next.js App Router pages
 │   │   ├── components/      # React components
 │   │   └── lib/             # Utilities (PocketBase, email)
 │   ├── __tests__/           # Unit tests
@@ -127,6 +139,7 @@ npm run test:ci
 │   └── Dockerfile
 │
 ├── docker-compose.yml       # Docker orchestration
+├── CLAUDE.md                # Development notes and troubleshooting
 └── .github/workflows/       # CI/CD pipelines
 ```
 
@@ -147,19 +160,70 @@ Inspired by the Jackson Trails neighborhood sign:
 
 ## 🚢 Deployment
 
-### GitHub Actions
+### Automated Deployment (GitHub Actions)
 
 Pushes to `main` trigger automatic builds:
 
 1. Run frontend tests
-2. Build Docker images
+2. Build Docker images (multi-platform: ARM64/AMD64)
 3. Push to GitHub Container Registry (GHCR)
-4. Watchtower auto-updates running containers
+4. Watchtower auto-updates running containers (~5-10 minutes total)
 
-### Manual Deployment
+### Fast Manual Deployment (Skip GitHub Actions)
+
+For faster deployments, build and push directly to GHCR:
+
+#### 1. One-Time Setup: Create GitHub Personal Access Token
+
+1. Go to: https://github.com/settings/tokens/new
+2. Name: "GHCR Docker Push"
+3. Expiration: 90 days (recommended)
+4. Scopes:
+   - ✅ `write:packages` (upload packages)
+   - ✅ `read:packages` (download packages)
+5. Generate and save the token
+
+#### 2. Login to GHCR
 
 ```bash
-# Pull latest images
+# Replace YOUR_TOKEN with the token from step 1
+echo "YOUR_TOKEN" | docker login ghcr.io -u YOUR_USERNAME --password-stdin
+```
+
+#### 3. Build, Tag, and Push Images
+
+**Frontend:**
+```bash
+# Build the image
+cd frontend
+docker build -t ghcr.io/alexkibler/jackson-trails-frontend:latest .
+
+# Push to GHCR
+docker push ghcr.io/alexkibler/jackson-trails-frontend:latest
+
+# Trigger Watchtower to update immediately (optional)
+curl -H "Authorization: Bearer YOUR_WATCHTOWER_TOKEN" \
+     http://localhost:8086/v1/update
+```
+
+**Backend:**
+```bash
+# Build the image
+cd backend
+docker build -t ghcr.io/alexkibler/jackson-trails-backend:latest .
+
+# Push to GHCR
+docker push ghcr.io/alexkibler/jackson-trails-backend:latest
+```
+
+> **Note:** Watchtower checks for updates every 5 minutes. To update immediately, use the curl command above or wait for the next check interval.
+
+### Pull-Based Deployment (Traditional)
+
+If you don't have local build access:
+
+```bash
+# Pull latest images from GHCR
 docker compose --profile prod pull
 
 # Restart services

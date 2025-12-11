@@ -1,6 +1,8 @@
 'use server'
 
 import { sendContactEmail, validateContactFormData, ContactFormData } from '@/lib/email'
+import { subscribeToNewsletter } from '@/lib/newsletter'
+import { validateSpamPrevention } from '@/lib/honeypot'
 
 export interface ContactFormResult {
   success: boolean
@@ -10,6 +12,18 @@ export interface ContactFormResult {
 export async function submitContactForm(
   formData: FormData
 ): Promise<ContactFormResult> {
+  // Validate spam prevention (honeypot + timing)
+  const honeypot = formData.get('website') as string
+  const formStartTime = formData.get('formStartTime') as string
+
+  const spamCheck = validateSpamPrevention(honeypot, formStartTime)
+  if (!spamCheck.isValid) {
+    return {
+      success: false,
+      error: spamCheck.error,
+    }
+  }
+
   // Extract form data
   const data: ContactFormData = {
     name: formData.get('name') as string,
@@ -17,6 +31,8 @@ export async function submitContactForm(
     subject: formData.get('subject') as string,
     message: formData.get('message') as string,
   }
+
+  const subscribeToNewsletter_ = formData.get('subscribeToNewsletter') === 'on'
 
   // Validate data
   const validationError = validateContactFormData(data)
@@ -35,6 +51,14 @@ export async function submitContactForm(
       success: false,
       error: 'Failed to send message. Please try again later.',
     }
+  }
+
+  // Subscribe to newsletter if requested
+  if (subscribeToNewsletter_) {
+    await subscribeToNewsletter({
+      email: data.email,
+      name: data.name,
+    })
   }
 
   return {

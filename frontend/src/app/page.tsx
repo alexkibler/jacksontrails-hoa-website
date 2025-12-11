@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getPocketBase, Announcement } from '@/lib/pocketbase'
+import { NewsletterSignup } from '@/components/NewsletterSignup'
 
 export const dynamic = 'force-dynamic'
 
@@ -91,6 +92,13 @@ export default async function Home() {
           </div>
         </section>
       )}
+
+      {/* Newsletter Signup */}
+      <section className="py-16 bg-jt-stone-50 dark:bg-jt-stone-900">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <NewsletterSignup />
+        </div>
+      </section>
 
       {/* Quick Links */}
       <section className="py-16 bg-white dark:bg-jt-stone-800">

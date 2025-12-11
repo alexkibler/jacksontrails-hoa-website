@@ -1,14 +1,21 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { submitContactForm } from '@/app/contact/actions'
+import { generateFormTimestamp } from '@/lib/honeypot'
 
 export function ContactForm() {
   const [isPending, setIsPending] = useState(false)
+  const [formStartTime, setFormStartTime] = useState<string>('')
   const [status, setStatus] = useState<{
     type: 'success' | 'error' | null
     message: string
   }>({ type: null, message: '' })
+
+  // Generate timestamp when component mounts
+  useEffect(() => {
+    setFormStartTime(generateFormTimestamp())
+  }, [])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -25,6 +32,8 @@ export function ContactForm() {
       })
       // Reset form
       ;(event.target as HTMLFormElement).reset()
+      // Generate new timestamp for next submission
+      setFormStartTime(generateFormTimestamp())
     } else {
       setStatus({
         type: 'error',
@@ -36,6 +45,29 @@ export function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" data-testid="contact-form">
+      {/* Honeypot field - hidden from users, but bots will fill it */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          width: '1px',
+          height: '1px',
+          opacity: 0,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Form start timestamp for time-based validation */}
+      <input
+        type="hidden"
+        name="formStartTime"
+        value={formStartTime}
+      />
+
       {/* Name */}
       <div>
         <label
@@ -131,6 +163,34 @@ export function ContactForm() {
         <p className="mt-1 text-sm text-jt-stone-500 dark:text-jt-stone-400">
           Maximum 5000 characters
         </p>
+      </div>
+
+      {/* Newsletter Opt-in */}
+      <div className="flex items-start">
+        <div className="flex items-center h-5">
+          <input
+            id="subscribeToNewsletter"
+            name="subscribeToNewsletter"
+            type="checkbox"
+            disabled={isPending}
+            data-testid="newsletter-checkbox"
+            className="w-4 h-4 border border-jt-stone-300 dark:border-jt-stone-600 rounded
+              bg-white dark:bg-jt-stone-700 text-jt-emerald-600
+              focus:ring-2 focus:ring-jt-emerald-500
+              disabled:opacity-50 disabled:cursor-not-allowed"
+          />
+        </div>
+        <div className="ml-3 text-sm">
+          <label
+            htmlFor="subscribeToNewsletter"
+            className="font-medium text-jt-stone-700 dark:text-jt-stone-300"
+          >
+            Subscribe to newsletter
+          </label>
+          <p className="text-jt-stone-500 dark:text-jt-stone-400">
+            Get updates about community events and important announcements
+          </p>
+        </div>
       </div>
 
       {/* Status Message */}

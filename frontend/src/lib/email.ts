@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer'
+import { MailerSend, EmailParams, Sender, Recipient } from 'mailersend'
 
 export interface ContactFormData {
   name: string
@@ -9,32 +9,25 @@ export interface ContactFormData {
 
 export async function sendContactEmail(data: ContactFormData): Promise<boolean> {
   try {
-    // Create transporter
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: process.env.SMTP_SECURE === 'true',
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
+    const mailerSend = new MailerSend({
+      apiKey: process.env.MAILERSEND_API_TOKEN || '',
     })
 
-    // Email content
-    const mailOptions = {
-      from: process.env.FROM_EMAIL,
-      to: process.env.BOARD_EMAIL,
-      subject: `[HOA Contact Form] ${data.subject}`,
-      replyTo: data.email,
-      text: `
-Name: ${data.name}
-Email: ${data.email}
-Subject: ${data.subject}
+    const sentFrom = new Sender(
+      process.env.MAILERSEND_FROM_EMAIL || '',
+      process.env.MAILERSEND_FROM_NAME || 'Jackson Trails HOA'
+    )
 
-Message:
-${data.message}
-      `.trim(),
-      html: `
+    const recipients = [
+      new Recipient(process.env.BOARD_EMAIL || '', 'HOA Board')
+    ]
+
+    const emailParams = new EmailParams()
+      .setFrom(sentFrom)
+      .setTo(recipients)
+      .setReplyTo({ email: data.email, name: data.name })
+      .setSubject(`[HOA Contact Form] ${data.subject}`)
+      .setHtml(`
         <h2>New Contact Form Submission</h2>
         <p><strong>Name:</strong> ${escapeHtml(data.name)}</p>
         <p><strong>Email:</strong> ${escapeHtml(data.email)}</p>
@@ -42,11 +35,17 @@ ${data.message}
         <hr>
         <h3>Message:</h3>
         <p>${escapeHtml(data.message).replace(/\n/g, '<br>')}</p>
-      `,
-    }
+      `)
+      .setText(`
+Name: ${data.name}
+Email: ${data.email}
+Subject: ${data.subject}
 
-    // Send email
-    await transporter.sendMail(mailOptions)
+Message:
+${data.message}
+      `.trim())
+
+    await mailerSend.email.send(emailParams)
     return true
   } catch (error) {
     console.error('Failed to send email:', error)
