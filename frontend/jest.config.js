@@ -17,6 +17,7 @@ const customJestConfig = {
     '!src/**/*.d.ts',
     '!src/**/*.stories.{js,jsx,ts,tsx}',
     '!src/**/__tests__/**',
+    '!src/components/KonamiCode.tsx',
   ],
   transformIgnorePatterns: ['/node_modules/(?!pocketbase/)'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/', '<rootDir>/e2e/'],

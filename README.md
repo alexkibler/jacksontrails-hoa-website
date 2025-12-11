@@ -102,6 +102,7 @@ docker compose --profile prod up -d
 cd frontend
 npm test
 ```
+> **Note:** All components, especially those handling user interactions like the Konami Code, should have comprehensive unit tests to ensure stability and meet the project's 70%+ test coverage threshold.
 
 ### E2E Tests
 
