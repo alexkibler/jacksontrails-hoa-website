@@ -3,6 +3,7 @@ import './fonts.css'
 import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { Navigation } from '@/components/Navigation'
+import { KonamiCode } from '@/components/KonamiCode'
 
 export const metadata: Metadata = {
   title: 'Jackson Trails HOA',
@@ -18,6 +19,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans">
         <ThemeProvider>
+          <KonamiCode />
           <div className="min-h-screen flex flex-col">
             <Navigation />
             <main className="flex-1">
