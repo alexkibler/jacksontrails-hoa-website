@@ -6,6 +6,12 @@ export function getPocketBase() {
   return new PocketBase(url)
 }
 
+// Client-side/Public PocketBase client
+export function getPublicPocketBase() {
+  const url = process.env.NEXT_PUBLIC_POCKETBASE_URL || 'http://localhost:8090'
+  return new PocketBase(url)
+}
+
 // Types for our collections
 export interface Announcement {
   id: string
@@ -31,6 +37,6 @@ export interface Document {
 
 // Helper to get file URL
 export function getFileUrl(record: any, filename: string): string {
-  const pb = getPocketBase()
+  const pb = getPublicPocketBase()
   return pb.getFileUrl(record, filename)
 }

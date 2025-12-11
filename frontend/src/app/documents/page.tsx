@@ -4,14 +4,17 @@ import { DocumentsFilter } from '@/components/DocumentsFilter'
 export const dynamic = 'force-dynamic'
 
 async function getAllDocuments(): Promise<Document[]> {
+  const url = process.env.POCKETBASE_URL || 'http://hoa-backend:8090'
+  console.log(`[DEBUG] Fetching documents from ${url}...`)
   try {
     const pb = getPocketBase()
     const records = await pb.collection('documents').getFullList<Document>({
       sort: '-year,-created',
     })
+    console.log(`[DEBUG] Fetched ${records.length} documents`)
     return records
   } catch (error) {
-    console.error('Failed to fetch documents:', error)
+    console.error('[DEBUG] Failed to fetch documents:', error)
     return []
   }
 }

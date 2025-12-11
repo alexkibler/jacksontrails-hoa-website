@@ -4,11 +4,14 @@ import { getPocketBase, Announcement } from '@/lib/pocketbase'
 export const dynamic = 'force-dynamic'
 
 async function getAllAnnouncements(): Promise<Announcement[]> {
+  const url = process.env.POCKETBASE_URL || 'http://hoa-backend:8090'
+  console.log(`[DEBUG] Fetching announcements from ${url}...`)
   try {
     const pb = getPocketBase()
     const records = await pb.collection('announcements').getFullList<Announcement>({
       sort: '-published_date',
     })
+    console.log(`[DEBUG] Fetched ${records.length} announcements`)
     return records
   } catch (error) {
     console.error('Failed to fetch announcements:', error)
