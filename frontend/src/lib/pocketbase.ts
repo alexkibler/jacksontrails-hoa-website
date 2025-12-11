@@ -59,6 +59,7 @@ export interface BoardMember {
   firstname: string
   lastname: string
   email: string
+  headshot?: string
   pronouns?: string
   position?: string
   bio?: string
