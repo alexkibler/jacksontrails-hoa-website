@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM golang:1.22-alpine AS builder
+FROM golang:1.22-alpine3.19 AS builder
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux go build -o pocketbase main.go
 
 # Stage 2: Run the application
-FROM alpine:latest
+FROM alpine:3.19
 
 # Install necessary packages (ca-certificates for HTTPS)
 RUN apk add --no-cache ca-certificates unzip wget bash
