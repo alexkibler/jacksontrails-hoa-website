@@ -80,7 +80,16 @@ export function KonamiCode() {
           <p className="text-sm text-jt-stone-600 dark:text-jt-stone-400 mb-4">
             You are now an honorary member of the Secret Committee of Neighborly Excellence™
           </p>
-          <div className="text-6xl animate-spin-slow">🏆</div>
+          <div className="flex justify-center my-4">
+            <video
+              src="/trophy_optimized.webm"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-32 h-32 object-contain"
+            />
+          </div>
           <button
             onClick={() => setActivated(false)}
             className="mt-6 px-6 py-2 bg-gradient-forest text-white rounded-lg hover:opacity-90 transition-opacity"
