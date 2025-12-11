@@ -1,5 +1,9 @@
 # Stage 1: Build the application
-FROM golang:1.22-alpine3.19 AS builder
+# Use the build platform (e.g., linux/amd64) to run the compiler, which is much faster than QEMU emulation
+FROM --platform=$BUILDPLATFORM golang:1.22-alpine3.19 AS builder
+
+ARG TARGETOS
+ARG TARGETARCH
 
 WORKDIR /app
 
@@ -17,7 +21,8 @@ RUN go mod tidy
 
 # Build the application
 # CGO_ENABLED=0 creates a statically linked binary
-RUN CGO_ENABLED=0 GOOS=linux go build -o pocketbase main.go
+# We use the TARGETOS and TARGETARCH arguments to cross-compile for the target platform
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o pocketbase main.go
 
 # Stage 2: Run the application
 FROM alpine:3.19
