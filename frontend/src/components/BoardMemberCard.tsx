@@ -17,17 +17,30 @@ export function BoardMemberCard({ member }: BoardMemberCardProps) {
 
   return (
     <div className="bg-white dark:bg-jt-stone-800 rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden h-full flex flex-col">
-      {headshotUrl && (
-        <div className="relative w-full h-64 bg-jt-stone-100 dark:bg-jt-stone-900">
+      {/* Fixed height headshot area - shows image or placeholder */}
+      <div className="relative w-full h-64 bg-jt-stone-100 dark:bg-jt-stone-900">
+        {headshotUrl ? (
           <Image
             src={headshotUrl}
             alt={`Headshot of ${fullName}`}
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            unoptimized
           />
-        </div>
-      )}
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <svg
+              className="w-24 h-24 text-jt-stone-300 dark:text-jt-stone-700"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+          </div>
+        )}
+      </div>
       <div className="p-6 flex-1 flex flex-col">
         {/* Name and Position */}
         <div className="mb-4">

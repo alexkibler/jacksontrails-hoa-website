@@ -69,7 +69,14 @@ export interface BoardMember {
 }
 
 // Helper to get file URL
+// Manually construct URL to use /pb proxy route instead of direct backend URL
 export function getFileUrl(record: any, filename: string): string {
-  const pb = getPublicPocketBase()
-  return pb.getFileUrl(record, filename)
+  if (!record || !filename) return ''
+
+  // Get collection name from record
+  const collectionId = record.collectionId || record.collection
+  const recordId = record.id
+
+  // Construct URL using /pb proxy route so it works in the browser
+  return `/pb/api/files/${collectionId}/${recordId}/${filename}`
 }
