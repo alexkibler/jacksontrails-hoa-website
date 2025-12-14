@@ -51,18 +51,20 @@ const nextConfig = {
       },
     ]
   },
-  async rewrites() {
-    return [
-      {
-        source: '/pb/_/:path*',
-        destination: 'http://hoa-backend:8090/_/:path*',
-      },
-      {
-        source: '/pb/api/:path*',
-        destination: 'http://hoa-backend:8090/api/:path*',
-      },
-    ]
-  },
+  // Rewrites removed - using API route proxy instead (/pb/[[...path]]/route.ts)
+  // Rewrites don't work in standalone mode and can't access runtime environment variables
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/pb/_/:path*',
+  //       destination: 'http://hoa-backend:8090/_/:path*',
+  //     },
+  //     {
+  //       source: '/pb/api/:path*',
+  //       destination: 'http://hoa-backend:8090/api/:path*',
+  //     },
+  //   ]
+  // },
 }
 
 module.exports = nextConfig

@@ -7,8 +7,11 @@ export async function GET(
   { params }: { params: { path?: string[] } }
 ) {
   const backendUrl = process.env.POCKETBASE_URL || 'http://hoa-backend:8090'
+  console.log('[PROXY DEBUG] POCKETBASE_URL:', process.env.POCKETBASE_URL)
+  console.log('[PROXY DEBUG] backendUrl:', backendUrl)
   const path = params.path?.join('/') || ''
   const url = `${backendUrl}/${path}${request.nextUrl.search}`
+  console.log('[PROXY DEBUG] Full URL:', url)
 
   try {
     const response = await fetch(url, {
