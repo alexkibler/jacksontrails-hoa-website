@@ -45,7 +45,7 @@ export function NewsletterSignup() {
 
   return (
     <div className="bg-white dark:bg-jt-stone-800 rounded-lg shadow-md p-8">
-      <h3 className="text-2xl font-bold text-jt-stone-900 dark:text-jt-stone-50 mb-4">
+      <h3 id="newsletter-heading" className="text-2xl font-bold text-jt-stone-900 dark:text-jt-stone-50 mb-4">
         Stay Informed
       </h3>
       <p className="text-jt-stone-600 dark:text-jt-stone-400 mb-6">
@@ -125,6 +125,8 @@ export function NewsletterSignup() {
         {/* Status Message */}
         {status.type && (
           <div
+            role="alert"
+            aria-live="polite"
             className={`p-3 rounded-md text-sm ${
               status.type === 'success'
                 ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200'

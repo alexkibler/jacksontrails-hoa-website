@@ -1,5 +1,8 @@
 // Learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom'
+import { toHaveNoViolations } from 'jest-axe'
+
+expect.extend(toHaveNoViolations)
 
 // Mock environment variables for tests
 process.env.POCKETBASE_URL = 'http://localhost:8090'

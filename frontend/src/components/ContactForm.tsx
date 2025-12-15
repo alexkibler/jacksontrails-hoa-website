@@ -196,6 +196,8 @@ export function ContactForm() {
       {/* Status Message */}
       {status.type && (
         <div
+          role="alert"
+          aria-live="polite"
           className={`p-4 rounded-md ${
             status.type === 'success'
               ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200'

@@ -135,7 +135,7 @@ export function DocumentsFilter({ documents }: DocumentsFilterProps) {
         </div>
 
         {/* Results Count */}
-        <div className="mt-4 text-sm text-jt-stone-600 dark:text-jt-stone-400">
+        <div className="mt-4 text-sm text-jt-stone-600 dark:text-jt-stone-400" role="status" aria-live="polite">
           Showing {filteredDocuments.length} of {documents.length} documents
         </div>
       </div>
@@ -151,18 +151,21 @@ export function DocumentsFilter({ documents }: DocumentsFilterProps) {
         <div className="bg-white dark:bg-jt-stone-800 rounded-lg shadow-md overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full" data-testid="documents-table">
+              <caption className="sr-only">
+                HOA Documents - {filteredDocuments.length} {filteredDocuments.length === 1 ? 'document' : 'documents'} found
+              </caption>
               <thead className="bg-jt-stone-50 dark:bg-jt-stone-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-jt-stone-500 dark:text-jt-stone-300 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-jt-stone-500 dark:text-jt-stone-300 uppercase tracking-wider">
                     Title
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-jt-stone-500 dark:text-jt-stone-300 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-jt-stone-500 dark:text-jt-stone-300 uppercase tracking-wider">
                     Category
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-jt-stone-500 dark:text-jt-stone-300 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-jt-stone-500 dark:text-jt-stone-300 uppercase tracking-wider">
                     Year
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-jt-stone-500 dark:text-jt-stone-300 uppercase tracking-wider">
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-jt-stone-500 dark:text-jt-stone-300 uppercase tracking-wider">
                     Action
                   </th>
                 </tr>
@@ -197,6 +200,7 @@ export function DocumentsFilter({ documents }: DocumentsFilterProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-jt-emerald-600 dark:text-jt-emerald-400 hover:underline font-medium"
+                        aria-label={`Download ${doc.title} PDF (opens in new tab)`}
                       >
                         Download PDF →
                       </a>
