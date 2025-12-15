@@ -225,7 +225,8 @@ export function ContactForm() {
 
       {/* Privacy Notice */}
       <p className="text-sm text-jt-stone-500 dark:text-jt-stone-400 text-center">
-        Your message will be sent directly to the HOA board. We do not store your information.
+        Your message will be sent directly to the HOA board. We do not store your information on our servers.
+        See our <a href="/privacy" className="text-jt-emerald-600 hover:text-jt-emerald-700 underline">privacy policy</a> for details about third-party email services.
       </p>
     </form>
   )

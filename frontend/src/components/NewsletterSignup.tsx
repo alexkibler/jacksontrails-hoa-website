@@ -149,6 +149,15 @@ export function NewsletterSignup() {
         >
           {isPending ? 'Subscribing...' : 'Subscribe'}
         </button>
+
+        {/* Privacy Notice */}
+        <p className="text-xs text-jt-stone-500 dark:text-jt-stone-400 text-center">
+          Your email will be stored by our newsletter service. See our{' '}
+          <a href="/privacy" className="text-jt-emerald-600 hover:text-jt-emerald-700 underline">
+            privacy policy
+          </a>{' '}
+          for details.
+        </p>
       </form>
     </div>
   )

@@ -66,6 +66,11 @@ export default function RootLayout({
                           RSS Feed
                         </a>
                       </li>
+                      <li>
+                        <a href="/privacy" className="text-jt-stone-600 dark:text-jt-stone-400 hover:text-jt-emerald-600 dark:hover:text-jt-emerald-400">
+                          Privacy Policy
+                        </a>
+                      </li>
                     </ul>
                   </div>
                   <div>
