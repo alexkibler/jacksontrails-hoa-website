@@ -1,4 +1,4 @@
-import { MailerSend, EmailParams, Sender, Recipient } from 'mailersend'
+import nodemailer from 'nodemailer'
 
 export interface ContactFormData {
   name: string
@@ -9,25 +9,24 @@ export interface ContactFormData {
 
 export async function sendContactEmail(data: ContactFormData): Promise<boolean> {
   try {
-    const mailerSend = new MailerSend({
-      apiKey: process.env.MAILERSEND_API_TOKEN || '',
+    // Create Gmail SMTP transporter
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // Use TLS
+      auth: {
+        user: process.env.GMAIL_USER || '',
+        pass: process.env.GMAIL_APP_PASSWORD || '',
+      },
     })
 
-    const sentFrom = new Sender(
-      process.env.MAILERSEND_FROM_EMAIL || '',
-      process.env.MAILERSEND_FROM_NAME || 'Jackson Trails HOA'
-    )
-
-    const recipients = [
-      new Recipient(process.env.BOARD_EMAIL || '', 'HOA Board')
-    ]
-
-    const emailParams = new EmailParams()
-      .setFrom(sentFrom)
-      .setTo(recipients)
-      .setReplyTo({ email: data.email, name: data.name })
-      .setSubject(`[HOA Contact Form] ${data.subject}`)
-      .setHtml(`
+    // Send email
+    await transporter.sendMail({
+      from: `"${process.env.GMAIL_FROM_NAME || 'Jackson Trails HOA'}" <${process.env.GMAIL_USER}>`,
+      to: process.env.BOARD_EMAIL || '',
+      replyTo: `"${data.name}" <${data.email}>`,
+      subject: `[HOA Contact Form] ${data.subject}`,
+      html: `
         <h2>New Contact Form Submission</h2>
         <p><strong>Name:</strong> ${escapeHtml(data.name)}</p>
         <p><strong>Email:</strong> ${escapeHtml(data.email)}</p>
@@ -35,17 +34,17 @@ export async function sendContactEmail(data: ContactFormData): Promise<boolean> 
         <hr>
         <h3>Message:</h3>
         <p>${escapeHtml(data.message).replace(/\n/g, '<br>')}</p>
-      `)
-      .setText(`
+      `,
+      text: `
 Name: ${data.name}
 Email: ${data.email}
 Subject: ${data.subject}
 
 Message:
 ${data.message}
-      `.trim())
+      `.trim(),
+    })
 
-    await mailerSend.email.send(emailParams)
     return true
   } catch (error) {
     console.error('Failed to send email:', error)

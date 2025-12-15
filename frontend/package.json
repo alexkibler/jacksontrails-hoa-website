@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@mailerlite/mailerlite-nodejs": "^1.5.0",
-    "mailersend": "^2.6.0",
     "next": "14.2.0",
     "nodemailer": "^6.9.13",
     "pocketbase": "^0.21.5",

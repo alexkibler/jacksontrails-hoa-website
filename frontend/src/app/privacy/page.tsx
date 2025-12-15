@@ -67,8 +67,8 @@ export default function PrivacyPage() {
                   <strong>Where your data goes:</strong>
                 </p>
                 <ul className="list-disc list-inside space-y-1 text-jt-stone-700 dark:text-jt-stone-300">
-                  <li><strong>MailerSend</strong> - Email delivery service that sends your message to the HOA board. MailerSend retains email delivery logs. View their <a href="https://www.mailersend.com/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-jt-emerald-600 hover:text-jt-emerald-700 underline">privacy policy</a>.</li>
-                  <li><strong>Board Email Provider</strong> - Your message is delivered via email to the HOA board&apos;s email address, where it is stored according to their email provider&apos;s policies (typically Gmail or similar).</li>
+                  <li><strong>Gmail (Google)</strong> - Your message is sent directly via Gmail to the HOA board&apos;s email address (jacksontrailshoa@gmail.com). Google stores the email according to their <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-jt-emerald-600 hover:text-jt-emerald-700 underline">privacy policy</a>. The email remains in the board&apos;s Gmail inbox and sent folder.</li>
+                  <li><strong>No third-party email services</strong> - We send emails directly through Gmail SMTP. Your message is only stored by Google/Gmail, not by any additional email delivery services.</li>
                 </ul>
               </div>
 
@@ -84,10 +84,13 @@ export default function PrivacyPage() {
                   <li>Your name (optional, if provided via contact form)</li>
                 </ul>
                 <p className="text-jt-stone-700 dark:text-jt-stone-300 mb-3">
-                  <strong>Where your data goes:</strong>
+                  <strong>Why we collect this and where it goes:</strong>
                 </p>
-                <ul className="list-disc list-inside space-y-1 text-jt-stone-700 dark:text-jt-stone-300">
-                  <li><strong>MailerLite</strong> - Email marketing platform that stores your email address to send you community newsletters. You can unsubscribe at any time using the link in any newsletter email. View their <a href="https://www.mailerlite.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-jt-emerald-600 hover:text-jt-emerald-700 underline">privacy policy</a>.</li>
+                <ul className="list-disc list-inside space-y-1 text-jt-stone-700 dark:text-jt-stone-300 mb-3">
+                  <li><strong>Purpose:</strong> To send you periodic community announcements, HOA updates, and newsletters about neighborhood events and important information.</li>
+                  <li><strong>MailerLite</strong> - Email marketing platform that stores your email address and subscription status. MailerLite is used specifically to manage newsletter subscriptions and send bulk announcements to community members who opt in.</li>
+                  <li><strong>Data collected by MailerLite:</strong> Email address, subscription date, email open/click statistics (for newsletter analytics only), and optional name if provided.</li>
+                  <li><strong>Your control:</strong> You can unsubscribe at any time using the link in any newsletter email. View MailerLite&apos;s <a href="https://www.mailerlite.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-jt-emerald-600 hover:text-jt-emerald-700 underline">privacy policy</a>.</li>
                 </ul>
               </div>
             </div>
@@ -119,9 +122,9 @@ export default function PrivacyPage() {
               Because we do not store your data on our servers, there is no data for us to access, modify, or delete. However, you have rights regarding data held by third-party services:
             </p>
             <ul className="list-disc list-inside space-y-2 text-jt-stone-700 dark:text-jt-stone-300">
-              <li><strong>Newsletter Unsubscribe:</strong> Click the unsubscribe link in any newsletter email from MailerLite</li>
-              <li><strong>Contact Form Submissions:</strong> Contact the HOA board directly to request deletion of your email messages</li>
-              <li><strong>Third-Party Data Rights:</strong> Contact MailerSend or MailerLite directly to exercise your data rights under GDPR, CCPA, or other privacy laws</li>
+              <li><strong>Newsletter Unsubscribe:</strong> Click the unsubscribe link in any newsletter email from MailerLite, or contact the HOA board to manually remove you from the list</li>
+              <li><strong>Contact Form Submissions:</strong> Your messages are stored in the board&apos;s Gmail account. Contact the HOA board directly to request deletion</li>
+              <li><strong>Third-Party Data Rights:</strong> Contact MailerLite or Google directly to exercise your data rights under GDPR, CCPA, or other privacy laws</li>
             </ul>
           </section>
 
