@@ -26,9 +26,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
   }
 
+  // Strip HTML tags and truncate content for description
+  const plainText = announcement.content
+    .replace(/<[^>]*>/g, '') // Remove HTML tags
+    .replace(/\s+/g, ' ') // Normalize whitespace
+    .trim()
+  const description = plainText.length > 160
+    ? plainText.substring(0, 157) + '...'
+    : plainText
+
   return {
     title: `${announcement.title} | Jackson Trails HOA`,
-    description: announcement.title,
+    description: description,
   }
 }
 

@@ -18,8 +18,22 @@ async function getFeaturedAnnouncements(): Promise<Announcement[]> {
   }
 }
 
+async function getRecentAnnouncements(): Promise<Announcement[]> {
+  try {
+    const pb = getPocketBase()
+    const records = await pb.collection('announcements').getList<Announcement>(1, 3, {
+      sort: '-published_date',
+    })
+    return records.items
+  } catch (error) {
+    console.error('Failed to fetch recent announcements:', error)
+    return []
+  }
+}
+
 export default async function Home() {
   const featuredAnnouncements = await getFeaturedAnnouncements()
+  const recentAnnouncements = await getRecentAnnouncements()
 
   return (
     <div className="min-h-screen">
@@ -54,7 +68,7 @@ export default async function Home() {
         <section className="py-16 bg-jt-stone-50 dark:bg-jt-stone-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold mb-8 text-jt-stone-900 dark:text-jt-stone-50">
-              Recent Updates
+              Featured Announcements
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {featuredAnnouncements.map((announcement) => (
@@ -92,6 +106,48 @@ export default async function Home() {
           </div>
         </section>
       )}
+
+      {/* Recent Announcements */}
+      <section className="py-16 bg-white dark:bg-jt-stone-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold mb-8 text-jt-stone-900 dark:text-jt-stone-50">
+            Recent Updates
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {recentAnnouncements.map((announcement) => (
+              <div
+                key={announcement.id}
+                className="bg-jt-stone-50 dark:bg-jt-stone-700 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow"
+              >
+                <h3 className="text-xl font-semibold mb-3 text-jt-stone-900 dark:text-jt-stone-50">
+                  {announcement.title}
+                </h3>
+                <p className="text-sm text-jt-stone-500 dark:text-jt-stone-400 mb-4">
+                  {new Date(announcement.published_date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </p>
+                <Link
+                  href={`/announcements/${announcement.slug}`}
+                  className="text-jt-emerald-600 dark:text-jt-emerald-400 hover:underline font-medium"
+                >
+                  Read more →
+                </Link>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <Link
+              href="/announcements"
+              className="text-jt-emerald-600 dark:text-jt-emerald-400 hover:underline font-medium"
+            >
+              View all announcements →
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Newsletter Signup */}
       <section className="py-16 bg-jt-stone-50 dark:bg-jt-stone-900">
